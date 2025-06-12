@@ -49,6 +49,14 @@
     #exportBtn { background: var(--primary-color); color: var(--bg-white); margin-bottom: 20px; }
     #mergeBtn { background: var(--success-color); color: var(--bg-white); }
     input[type="file"] { margin-bottom: 10px; }
+.email-info {
+  margin-top: 0px;      /* 和按钮之间留点空 */
+  color: #555;           /* 灰色字体，温和醒目 */
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  word-break: break-all; /* 防止邮箱地址太长换行 */
+}
+
   </style>
 </head>
 <body>
@@ -73,8 +81,8 @@
       <table id="fatigueTable"><caption>疲劳评估项目</caption><thead><tr><th>序号</th><th>项目</th><th>是/否</th><th>疲劳值</th><th>得分</th></tr></thead><tbody></tbody><tfoot><tr><td colspan="4">总疲劳值</td><td id="totalScore">0</td></tr></tfoot></table>
       <fieldset class="voting" aria-labelledby="voting-legend"><legend id="voting-legend">体感疲劳度</legend><label><input type="radio" name="selfFatigue" value="A"> A 不疲劳</label><label><input type="radio" name="selfFatigue" value="B"> B 轻度</label><label><input type="radio" name="selfFatigue" value="C"> C 中度 </label><label><input type="radio" name="selfFatigue" value="D"> D 高度</label></fieldset>
       <table class="symptom-table"><caption>体感疲劳度参考</caption><thead><tr><th>症状类型</th><th>不疲劳</th><th>轻度疲劳</th><th>中度疲劳</th><th>高度疲劳</th></tr></thead><tbody><tr><td>注意力</td><td>正常，全神贯注</td><td>注意力开始不集中，逐渐出现分配不合理情况</td><td>注意力集中不起来，不能合理分配</td><td>严重分配混乱，难以完成任务</td></tr><tr><td>反应力</td><td>能够熟练、准确地完成飞行动作</td><td>反应能力下降，飞行动作有时不稳定</td><td>反应迟钝，容易出现小错误</td><td>反应严重迟缓，明显失误</td></tr><tr><td>兴奋性</td><td>兴奋度高，有持续飞行愿望</td><td>积极性和兴奋性下降，不想持续飞行</td><td>失去兴奋性，想停下休息</td><td>完全无兴奋性，抗拒飞行</td></tr><tr><td>情绪</td><td>高昂、愉快、活泼</td><td>有点低落，飞行基本感觉不到愉快</td><td>对飞行产生厌倦</td><td>情绪极度低落，难以继续</td></tr><tr><td>生理状况</td><td>精力充沛，心率血压正常</td><td>乏力，精神不振，心率血压下降</td><td>头痛、心跳加快、神经失调，有失眠症状</td><td>严重不适，无法维持生理平衡</td></tr></tbody></table>
-      <button type="button" id="exportBtn">点此复制右侧邮箱地址并导出为 CSV</button>
-<span style="margin-left:16px;color:#555;font-size:14px;">邮箱地址：1@111.com</span>
+      <button type="button" id="exportBtn">点此复制下方邮箱地址并导出为 CSV</button>
+<div class="email-info">邮箱地址：1@111.com</div>
     </section>
     <section id="tab2" class="tabpanel" role="tabpanel" aria-labelledby="tab2-btn" hidden>
       <article class="instructions">
