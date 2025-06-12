@@ -66,14 +66,15 @@
       <form id="fatigueForm" class="info-form">
         <label>姓名：<input type="text" id="userName" name="userName"></label>
         <label>年龄：<input type="number" id="userAge" name="userAge"></label>
-        <label>飞行管理干部：<div class="yesno"><label><input type="radio" name="isManager" value="是"> 是</label><label><input type="radio" name="isManager" value="否" checked> 否</label></div></label>
+        <label>飞行管理干部：<div class="yesno"><label><input type="radio" name="isManager" value="是"> 是</label><label><input type="radio" name="isManager" value="否"> 否</label></div></label>
         <label>填报时间：<input type="date" id="reportDate" name="reportDate"></label>
         <label>累计疲劳值：<select id="initialFatigue"></select></label>
       </form>
       <table id="fatigueTable"><caption>疲劳评估项目</caption><thead><tr><th>序号</th><th>项目</th><th>是/否</th><th>疲劳值</th><th>得分</th></tr></thead><tbody></tbody><tfoot><tr><td colspan="4">总疲劳值</td><td id="totalScore">0</td></tr></tfoot></table>
       <fieldset class="voting" aria-labelledby="voting-legend"><legend id="voting-legend">体感疲劳度</legend><label><input type="radio" name="selfFatigue" value="A"> A 不疲劳</label><label><input type="radio" name="selfFatigue" value="B"> B 轻度</label><label><input type="radio" name="selfFatigue" value="C"> C 中度 </label><label><input type="radio" name="selfFatigue" value="D"> D 高度</label></fieldset>
       <table class="symptom-table"><caption>体感疲劳度参考</caption><thead><tr><th>症状类型</th><th>不疲劳</th><th>轻度疲劳</th><th>中度疲劳</th><th>高度疲劳</th></tr></thead><tbody><tr><td>注意力</td><td>正常，全神贯注</td><td>注意力开始不集中，逐渐出现分配不合理情况</td><td>注意力集中不起来，不能合理分配</td><td>严重分配混乱，难以完成任务</td></tr><tr><td>反应力</td><td>能够熟练、准确地完成飞行动作</td><td>反应能力下降，飞行动作有时不稳定</td><td>反应迟钝，容易出现小错误</td><td>反应严重迟缓，明显失误</td></tr><tr><td>兴奋性</td><td>兴奋度高，有持续飞行愿望</td><td>积极性和兴奋性下降，不想持续飞行</td><td>失去兴奋性，想停下休息</td><td>完全无兴奋性，抗拒飞行</td></tr><tr><td>情绪</td><td>高昂、愉快、活泼</td><td>有点低落，飞行基本感觉不到愉快</td><td>对飞行产生厌倦</td><td>情绪极度低落，难以继续</td></tr><tr><td>生理状况</td><td>精力充沛，心率血压正常</td><td>乏力，精神不振，心率血压下降</td><td>头痛、心跳加快、神经失调，有失眠症状</td><td>严重不适，无法维持生理平衡</td></tr></tbody></table>
-      <button type="button" id="exportBtn">导出为 CSV</button>
+      <button type="button" id="exportBtn">点此复制右侧邮箱地址并导出为 CSV</button>
+<span style="margin-left:16px;color:#555;font-size:14px;">邮箱地址：1@111.com</span>
     </section>
     <section id="tab2" class="tabpanel" role="tabpanel" aria-labelledby="tab2-btn" hidden>
       <article class="instructions">
@@ -131,7 +132,8 @@
         document.getElementById(tab.getAttribute('aria-controls')).hidden = false;
       }));
       const initialSelect = document.getElementById('initialFatigue');
-      for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
+initialSelect.append(new Option('请选择', '')); // 第一个选项为空
+for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
       const items = [
         {label:'连续飞行值勤第3天',unitVal:2,unitText:'2分/天'},
         {label:'连续飞行值勤第4天',unitVal:3,unitText:'3分/天'},
@@ -174,57 +176,115 @@
       }
       document.querySelectorAll('.yesno input').forEach(inp => inp.addEventListener('change', updateScores));
       initialSelect.addEventListener('change', updateScores);
-      document.getElementById('exportBtn').addEventListener('click', () => {
-  // 1. 获取表单中各项值
-  const name = document.getElementById('userName').value.trim();
-  const age = document.getElementById('userAge').value.trim();
-  const isManager = document.querySelector('input[name="isManager"]:checked').value;
-  const date = document.getElementById('reportDate').value;
-  const initial = initialSelect.value;  // 初始累积疲劳值:contentReference[oaicite:0]{index=0}
+     document.getElementById('exportBtn').addEventListener('click', () => {
+  let hasError = false;
 
-  // 2. 构造表头：固定字段 + 22 个项目名称 + 2 个结尾字段
+  // 1. 先清除所有之前的高亮
+  document.querySelectorAll('.info-form input, .info-form select').forEach(e => {
+    e.style.border = '';
+    e.style.background = '';
+  });
+  document.querySelectorAll('.yesno').forEach(div => div.style.background = '');
+document.querySelectorAll('input[name="selfFatigue"]').forEach(inp => {
+  inp.parentElement.style.background = '';
+});
+
+  // 2. 校验每个必填项（姓名、年龄、管理干部、填报时间、累计疲劳值、22项单选、体感疲劳度）
+  // 2.1 姓名、年龄、填报时间
+  const nameInput = document.getElementById('userName');
+  const ageInput = document.getElementById('userAge');
+  const dateInput = document.getElementById('reportDate');
+  const fatigueSelect = document.getElementById('initialFatigue');
+
+  if (!nameInput.value.trim()) { nameInput.style.border = '2px solid red'; hasError = true; }
+  if (!ageInput.value.trim()) { ageInput.style.border = '2px solid red'; hasError = true; }
+  if (!dateInput.value.trim()) { dateInput.style.border = '2px solid red'; hasError = true; }
+  if (!fatigueSelect.value) { fatigueSelect.style.border = '2px solid red'; hasError = true; }
+
+  // 2.2 是否飞行管理干部
+  const managerRadios = document.querySelectorAll('input[name="isManager"]');
+  if (![...managerRadios].some(r => r.checked)) {
+    // 高亮整个选项区域
+    managerRadios.forEach(r => r.parentElement.parentElement.style.background = '#ffeaea');
+    hasError = true;
+  }
+
+  // 2.3 22个疲劳评估项目
+  for (let i = 0; i < 22; i++) {
+    const radios = document.querySelectorAll(`input[name="item${i}"]`);
+    if (![...radios].some(r => r.checked)) {
+      // 高亮
+      radios.forEach(r => r.parentElement.parentElement.style.background = '#ffeaea');
+      hasError = true;
+    }
+  }
+
+  // 2.4 体感疲劳度
+  const selfFatigueRadios = document.querySelectorAll('input[name="selfFatigue"]');
+  if (![...selfFatigueRadios].some(r => r.checked)) {
+    selfFatigueRadios.forEach(r => r.parentElement.style.background = '#ffeaea');
+    hasError = true;
+  }
+
+if (hasError) {
+  showToast('有未填写项目，请完善所有内容！');
+  return;
+}
+
+  // ======= 校验通过，执行后续导出逻辑 =======
+  // ... 你原有的导出CSV代码（比如生成内容/下载/复制邮箱等） ...
+  // 这里贴回你的后续逻辑即可
+  // 例如：
+
+  const name = nameInput.value.trim();
+  const age = ageInput.value.trim();
+  const isManager = document.querySelector('input[name="isManager"]:checked').value;
+  const date = dateInput.value;
+  const initial = fatigueSelect.value;
+
+  // ... header/data/csv构造 ... 
+
+  const fileNameUser = name.replace(/[\\/:*?"<>|,\s]/g, '') || '未知姓名';
+  const fileNameDate = date || new Date().toISOString().slice(0,10);
+
   const header = [
     '姓名',
     '年龄',
     '是否飞行干部',
     '填报时间',
     '累计疲劳值',
-    // 依次插入所有 fatigue 项目的 label
     ...items.map(it => it.label),
     '总疲劳值',
     '体感疲劳度'
   ];
 
-  // 3. 构造数据行：前 5 列 + 22 列“是/否” + 总分 + 体感疲劳度
   const data = [
     name,
     age,
     isManager,
     date,
     initial,
-    // 每个项目对应“是”或“否”
     ...items.map((_, i) =>
       document.querySelectorAll('.score-cell')[i].textContent
     ),
-    // 计算好的总疲劳值
     document.getElementById('totalScore').textContent,
-    // 选中的体感疲劳度（A/B/C/D）
     document.querySelector('input[name="selfFatigue"]:checked').value
   ];
 
-  // 4. 生成并下载 CSV 文件
-  const csv = [header, data]
-    .map(row => row.join(','))
-    .join('\n');
-  const blob = new Blob(
-    ['\uFEFF' + csv],
-    { type: 'text/csv;charset=utf-8;' }
-  );
+  const csv = [header, data].map(row => row.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = `疲劳评估_${new Date().toISOString().slice(0,10)}.csv`;
+  link.download = `${fileNameUser}_${fileNameDate}.csv`;
+
+  // 自动复制邮箱
+  const email = '1@111.com';
+  navigator.clipboard.writeText(email);
+
   link.click();
+
 });
+
 
       document.getElementById('mergeBtn').addEventListener('click', () => {
         const files = Array.from(document.getElementById('csvFiles').files);
@@ -243,11 +303,77 @@
           if (skipped.length) alert('以下文件已跳过：\n'+skipped.join('\n'));
           const blob = new Blob(['\uFEFF'+merged.join('\n')], {type:'text/csv;charset=utf-8;'});
           const link = document.createElement('a'); link.href = URL.createObjectURL(blob);
-          link.download = `merged_${new Date().toISOString().slice(0,10)}.csv`;
+         const randomNum = Math.floor(1000 + Math.random() * 9000); // 1000~9999的四位数
+link.download = `merged_${new Date().toISOString().slice(0,10)}_${randomNum}.csv`;
           link.click();
         }).catch(e => alert('合并出错:'+e));
       });
     });
+function showToast(msg, duration=2500) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(() => {
+    toast.style.display = 'none';
+  }, duration);
+}
+// 输入框/下拉框即时校验
+['userName', 'userAge', 'reportDate'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function() {
+    if (this.value.trim()) {
+      this.style.border = '';
+      this.style.background = '';
+    }
+  });
+});
+document.getElementById('initialFatigue').addEventListener('change', function() {
+  if (this.value) {
+    this.style.border = '';
+    this.style.background = '';
+  }
+});
+
+// 飞行管理干部单选
+document.querySelectorAll('input[name="isManager"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    radio.parentElement.parentElement.style.background = '';
+  });
+});
+
+// 疲劳评估项目
+for(let i=0; i<22; i++){
+  document.querySelectorAll(`input[name="item${i}"]`).forEach(radio => {
+    radio.addEventListener('change', function() {
+      radio.parentElement.parentElement.style.background = '';
+    });
+  });
+}
+
+// 体感疲劳度
+document.querySelectorAll('input[name="selfFatigue"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    document.querySelectorAll('input[name="selfFatigue"]').forEach(inp => {
+      inp.parentElement.style.background = '';
+    });
+  });
+});
   </script>
+<div id="toast" style="
+  display:none;
+  position: fixed;
+  left: 50%;
+  bottom: 60px;
+  transform: translateX(-50%);
+  min-width: 240px;
+  background: #e34c4c;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  text-align: center;
+  z-index: 9999;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.16);
+  "></div>
 </body>
 </html>
