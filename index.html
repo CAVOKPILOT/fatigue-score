@@ -303,7 +303,7 @@ for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
       const tbody = document.querySelector('#fatigueTable tbody');
       items.forEach((it,i) => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${i+1}</td><td>${it.label}</td><td class="yesno"><label><input type="radio" name="item${i}" value="1">是</label><label><input type="radio" name="item${i}" value="0" checked>否</label></td><td>${it.unitText}</td><td class="score-cell">0</td>`;
+        tr.innerHTML = `<td>${i+1}</td><td>${it.label}</td><td class="yesno"><label><input type="radio" name="item${i}" value="1">是</label>&nbsp;&nbsp;<label><input type="radio" name="item${i}" value="0" checked>否</label></td><td>${it.unitText}</td><td class="score-cell">0</td>`;
         tbody.appendChild(tr);
       });
      function updateScores() {
