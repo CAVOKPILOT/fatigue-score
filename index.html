@@ -24,11 +24,11 @@
     .tab[aria-selected="true"] { border-bottom: 4px solid var(--primary-color); font-weight: bold; color: var(--primary-color); }
     .tabpanel { display: none; padding-top: 10px; }
     .tabpanel:not([hidden]) { display: block; }
-    .instructions { background: var(--bg-white); border: 1px solid var(--border-color); border-radius: 4px; padding: 16px; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+    .instructions { background: var(--bg-white); border: 1px solid var(--border-color); border-radius: 4px; padding: 16px; font-size: 10px; line-height: 1.6; margin-bottom: 20px; }
     .instructions ol { padding-left: 1.5em; }
-    .instructions ol ol { padding-left: 2.5em; }
-    .instructions ol ol ol { padding-left: 3.5em; }
-    .instructions ol ol ol ol { padding-left: 4.5em; }
+    .instructions ol ol { padding-left: 0em; }
+    .instructions ol ol ol { padding-left: 2em; }
+    .instructions ol ol ol ol { padding-left: 3em; }
     .instructions ol li { margin-bottom: 0.5em; }
     .info-form { display: flex; flex-wrap: wrap; gap: 20px; background: var(--bg-white); border: 1px solid var(--border-color); border-radius: 4px; padding: 16px; margin-bottom: 20px; }
     .info-form label { display: flex; flex-direction: column; font-size: 14px; }
@@ -46,7 +46,7 @@
     .symptom-table caption { font-weight: bold; margin-bottom: 8px; text-align: left; }
     button { font-size: 14px; }
     #exportBtn, #mergeBtn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
-    #exportBtn { background: var(--primary-color); color: var(--bg-white); margin-bottom: 20px; }
+    #exportBtn { background: var(--success-color); color: var(--bg-white); margin-bottom: 20px; }
     #mergeBtn { background: var(--success-color); color: var(--bg-white); }
     input[type="file"] { margin-bottom: 10px; }
 .email-info {
@@ -67,11 +67,11 @@
     <button role="tab" class="tab" id="tab1-btn" aria-selected="true" aria-controls="tab1">疲劳计算器</button>
     <button role="tab" class="tab" id="tab2-btn" aria-selected="false" aria-controls="tab2">填写说明</button>
     <button role="tab" class="tab" id="tab3-btn" aria-selected="false" aria-controls="tab3">CSV 文件</button>
-    <button role="tab" class="tab" id="tab4-btn" aria-selected="false" aria-controls="tab4">填写指南</button>
+    <!-- <button role="tab" class="tab" id="tab4-btn" aria-selected="false" aria-controls="tab4">填写指南</button> -->
   </nav>
   <main>
     <section id="tab1" class="tabpanel" role="tabpanel" aria-labelledby="tab1-btn">
-      <div class="instructions"><h2>注意：连续填写时，请输入累计疲劳值</h2></div>
+      <div class="instructions"><h2>注意：<br>连续填写时，请输入累计疲劳值<br>服务器不记录填写内容，请上传CSV文件</h2></div>
       <form id="fatigueForm" class="info-form">
         <label>姓名：<input type="text" id="userName" name="userName"></label>
         <label>年龄：<input type="number" id="userAge" name="userAge"></label>
@@ -79,43 +79,117 @@
         <label>填报时间：<input type="date" id="reportDate" name="reportDate"></label>
         <label>累计疲劳值：<select id="initialFatigue"></select></label>
       </form>
-      <table id="fatigueTable"><caption>疲劳评估项目</caption><thead><tr><th>序号</th><th>项目</th><th>是/否</th><th>疲劳值</th><th>得分</th></tr></thead><tbody></tbody><tfoot><tr><td colspan="4">总疲劳值</td><td id="totalScore">0</td></tr></tfoot></table>
+      <table id="fatigueTable">
+  <caption>疲劳评估项目</caption>
+  <thead>
+    <tr>
+      <th>序号</th>
+      <th>项目</th>
+      <th>是/否</th>
+      <th>疲劳值</th>
+      <th>得分</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- 此处由JS动态生成内容 -->
+  </tbody>
+<tfoot>
+  <tr>
+    <td colspan="4">单次疲劳值</td>
+    <td id="singleScore"></td>
+  </tr>
+  <tr>
+    <td colspan="4">总疲劳值</td>
+    <td id="totalScore"></td>
+  </tr>
+</tfoot>
+</table>
       <fieldset class="voting" aria-labelledby="voting-legend"><legend id="voting-legend">体感疲劳度</legend><label><input type="radio" name="selfFatigue" value="A"> A 不疲劳</label><label><input type="radio" name="selfFatigue" value="B"> B 轻度</label><label><input type="radio" name="selfFatigue" value="C"> C 中度 </label><label><input type="radio" name="selfFatigue" value="D"> D 高度</label></fieldset>
-      <table class="symptom-table"><caption>体感疲劳度参考</caption><thead><tr><th>症状类型</th><th>不疲劳</th><th>轻度疲劳</th><th>中度疲劳</th><th>高度疲劳</th></tr></thead><tbody><tr><td>注意力</td><td>正常，全神贯注</td><td>注意力开始不集中，逐渐出现分配不合理情况</td><td>注意力集中不起来，不能合理分配</td><td>严重分配混乱，难以完成任务</td></tr><tr><td>反应力</td><td>能够熟练、准确地完成飞行动作</td><td>反应能力下降，飞行动作有时不稳定</td><td>反应迟钝，容易出现小错误</td><td>反应严重迟缓，明显失误</td></tr><tr><td>兴奋性</td><td>兴奋度高，有持续飞行愿望</td><td>积极性和兴奋性下降，不想持续飞行</td><td>失去兴奋性，想停下休息</td><td>完全无兴奋性，抗拒飞行</td></tr><tr><td>情绪</td><td>高昂、愉快、活泼</td><td>有点低落，飞行基本感觉不到愉快</td><td>对飞行产生厌倦</td><td>情绪极度低落，难以继续</td></tr><tr><td>生理状况</td><td>精力充沛，心率血压正常</td><td>乏力，精神不振，心率血压下降</td><td>头痛、心跳加快、神经失调，有失眠症状</td><td>严重不适，无法维持生理平衡</td></tr></tbody></table>
-      <button type="button" id="exportBtn">点此复制下方邮箱地址并导出为 CSV</button>
-<div class="email-info">邮箱地址：1@111.com</div>
+    <table class="symptom-table">
+  <caption>体感疲劳度参考</caption>
+  <thead>
+    <tr>
+      <th>症状类型</th>
+      <th>飞行轻度疲劳</th>
+      <th>飞行中度疲劳</th>
+      <th>飞行高度疲劳</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>注意力</td>
+      <td>正常、全神贯注</td>
+      <td>注意力开始不集中、逐渐出现分配不合理情况</td>
+      <td>注意力集中不起来、不能合理分配</td>
+    </tr>
+    <tr>
+      <td>反应力</td>
+      <td>能够熟练、准确地完成飞行动作、能力与技术能够正常表现</td>
+      <td>反应能力下降、飞行动作有时不稳定</td>
+      <td>反应迟钝、容易出现小错误</td>
+    </tr>
+    <tr>
+      <td>兴奋性</td>
+      <td>兴奋度高、有持续飞行的愿望</td>
+      <td>积极性和兴奋性下降、不想持续飞行</td>
+      <td>失去兴奋性、想停下来休息</td>
+    </tr>
+    <tr>
+      <td>情绪</td>
+      <td>高昂、愉快、活泼</td>
+      <td>有点低落、飞行基本感觉不到愉快</td>
+      <td>对飞行产生厌倦</td>
+    </tr>
+    <tr>
+      <td>生理状况</td>
+      <td>精力充沛、心率血压正常</td>
+      <td>乏力、精神不振、心率血压下降</td>
+      <td>头痛、心跳加快、神经失调、有失眠症状</td>
+    </tr>
+  </tbody>
+</table>
+
+      <button type="button" id="exportBtn" >点此导出为 CSV 文件</button>
+<div class="email-info">邮箱地址：N/A</div>
     </section>
     <section id="tab2" class="tabpanel" role="tabpanel" aria-labelledby="tab2-btn" hidden>
       <article class="instructions">
         <h2>填写说明</h2>
         <ol>
           <li><strong>评估范围：</strong>生理性疲劳评估范围为东北地区运输航空公司飞行人员及飞行管理干部，不包括公司级飞行管理干部，先在南航开始试点。</li>
-          <li><strong>评估依据：</strong>本指标是在结合《大型飞机公共航空运输承运人运行合格审定规则》（CCAR-121-R8）P章关于飞行人员休息期、执勤期相关规定的基础上，结合人的生理疲劳特点及个体身体状况制定。考虑到个体差异性和疲劳耐受性，此评估不作为强制停飞依据。</li>
+          <li><strong>评估依据：</strong>本指标是在结合《大型飞机公共航空运输承运人运行合格审定规则》（CCAR-121-R8）P章，关于飞行人员休息期、执勤期相关规定的基础上，结合人的生理疲劳特点及个体身体状况制定。考虑到个体差异性和疲劳耐受性，此评估不作为强制停飞依据。</li>
           <li><strong>评估目的：</strong>本指标通过量化评估疲劳阈值，旨在落实《大型飞机公共航空运输航空卫生工作要求》（AC121-FS-101R2）中关于飞行前对机组成员健康状况评估的要求，通过对疲劳指标进行量化，提醒航空公司掌握飞行人员生理性疲劳状况，防范因生理性疲劳引发失能风险；同时鼓励并支持飞行人员主动在疲劳状态“举手”报告，强化疲劳风险防范意识。</li>
           <li><strong>填写方法：</strong>
-            <ol type="a">
-              <li>填报时间为前一次飞行执勤期结束后至下一个飞行执勤期开始前填报单次疲劳值，包括前一个飞行执勤期情况及飞行执勤前休息情况。</li>
-              <li>首次填报时，累积疲劳值为零。</li>
-              <li>遇有不适用项，该项疲劳评估值为零。</li>
-              <li>若未达到疲劳阈值或未获得休息，疲劳值累积计算，累积疲劳值为每个单次疲劳值累积值。</li>
-              <li><strong>累计疲劳值归零情况：</strong>
-                <ol type="i">
-                  <li>在值勤前或者主备份前的144小时内，至少获得连续60个小时（含）休息时间的情况。</li>
-                  <li>前一个飞行值勤期结束后到下一个飞行值勤期开始前，获得连续休息16小时（含）以上的情况。</li>
-                  <li>疲劳举手获得充分休息并恢复到轻度疲劳或不疲劳状态后。</li>
+            <ol style="list-style:none;">
+              <li>4.1 填报时间为前一次飞行值勤期结束后至下一个飞行值勤期开始前，评估前一个飞行值勤期情况及飞行值勤前休息情况。</li>
+              <li>4.2 操作指南：
+                  <ol style="list-style:none;">
+                  <li>4.2.1 微信扫描或识别二维码进入页面后，可直接在微信页面中填写，亦可点右上角选 “...”打开第三方浏览器（如“QQ浏览器”或“默认浏览器”即可开始逐项填写。</li>
+                 <li>4.2.2 填写后，点选“点此导出CSV文件”即可打开或保存CSV文件。如果使用微信页面填写，可直接在弹出页面点击右上角“...”转发或保存文件。</li>
+                 <li>4.2.3 合并CSV文件前，先点击“选择文件”按钮，进入文件选择页面。</li>
+                 <li>4.2.4 点击“CSV文件合并”即可合并所有已填写并下载的疲劳评估表格。使用“4.2.2”的操作方法即可转发和分享合并后的CSV文件。</li>
+                  </ol>
+              <li>4.3 每次填报请务必填写“累计疲劳值”。首次填报时，“累计疲劳值”为0。之后，每次填报，“累计疲劳值”为上一次填报生成的“总疲劳值”。</li>
+              <li>4.4 遇有不适用项，该项疲劳评估值为0。</li>
+              <li>4.5 若未达到疲劳阈值或未获得休息，疲劳值继续累计计算。</li>
+              <li>4.6 累计疲劳值归零情况：
+                <ol style="list-style:none;">
+                  <li>4.6.1 在值勤前或者主备份前的144小时内，至少获得连续60个小时（含）休息时间的情况。</li>
+                  <li>4.6.2 前一个飞行值勤期结束后到下一个飞行值勤期开始前，获得连续休息15小时（含）以上的情况。</li>
+                  <li>4.6.3 疲劳举手获得充分休息并恢复到轻度疲劳或不疲劳状态后。</li>
                 </ol>
               </li>
             </ol>
           </li>
           <li><strong>相关释义：</strong>
-            <ol type="a">
-              <li>“连续值勤五天”包括飞行值勤、主备份、置位、模拟机训练和地面培训。</li>
-              <li>第3条至第8条中的“凌晨”均指起飞机场和目的地机场的当地时间。</li>
-              <li>第5条、第6条及女性生理期出现任一情况时，鼓励并支持飞行员在疲劳状态时“举手”报告。</li>
-              <li>第9条、第10条中“一般高原机场”与“高高原机场”按南航《运行手册》第14.4条定义执行。</li>
-              <li>第11条“需特殊机长资格批准机场”按南航《运行规范》C0003条款批准的机场清单执行。</li>
-              <li>第17–22条每次报告疲劳值时进行重复统计。</li>
-              <li>本指标确定的疲劳阈值（重度疲劳值）需先在部分一线飞行员中试行统计得出。</li>
+            <ol style="list-style:none;">
+              <li>5.1 “连续值勤五天”包括飞行值勤、主备份、置位、模拟机训练和地面培训。</li>
+              <li>5.2 本指标评估使用24小时计时制。表中有关时间均指执行任务的当地时间。</li>
+              <li>5.3 第 6 条、第 7 条及女性生理期出现任一情况时，鼓励并支持飞行员疲劳“举手”报告。</li>
+              <li>5.4 第 10条、第 11 条中“一般高原机场”与“高高原机场”均按南航《运行手册》第 14.4 条定义执行。</li>
+              <li>5.5 第 12 条“需特殊机长资格批准机场”按南航《运行规范》C0003 条款批准的机场清单执行。</li>
+              <li>5.6 第 17–22 条每次报告疲劳值时进行重复统计。</li>
+              <li>5.7 本指标确定的疲劳阈值（重度疲劳值）需先在部分一线飞行员中试行统计得出。</li>
             </ol>
           </li>
         </ol>
@@ -139,7 +213,7 @@
           <li><strong>填写基本信息：</strong> 姓名、年龄、是否飞行管理干部、填报时间、累计疲劳值（首次为0，连续填写选上次总疲劳值）。</li>
           <li><strong>22项疲劳项目：</strong> 逐项选择“是/否”，自动算分。</li>
           <li><strong>体感疲劳度：</strong> 选择A~D（旁边表格可参考）。</li>
-          <li><strong>导出数据：</strong> 填写完整后点击“点此复制下方邮箱地址并导出为 CSV”下载数据，自动复制邮箱地址。未填写项会标红提示，需补全后才能导出。</li>
+          <li><strong>导出数据：</strong> 填写完整后点击“点此导出为 CSV 文件”下载数据，自动复制邮箱地址。未填写项会标红提示，需补全后才能导出。</li>
           <li>
             <strong>CSV文件名命名规则：</strong>
               <ol type="i">
@@ -205,26 +279,26 @@ for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
       const items = [
         {label:'连续飞行值勤第3天',unitVal:2,unitText:'2分/天'},
         {label:'连续飞行值勤第4天',unitVal:3,unitText:'3分/天'},
-        {label:'连续执勤五天',unitVal:5,unitText:'5分/次'},
-        {label:'早6:00前签到或过夜5:30前发车',unitVal:1,unitText:'1分/次'},
-        {label:'凌晨0:00-1:59解除任务',unitVal:2,unitText:'2分/次'},
-        {label:'凌晨2:00-3:59解除任务',unitVal:4,unitText:'4分/次'},
-        {label:'凌晨4:00后解除任务',unitVal:5,unitText:'5分/次'},
-        {label:'休息不足14小时',unitVal:3,unitText:'3分/次'},
-        {label:'48-60小时休息期',unitVal:5,unitText:'5分/次'},
+        {label:'连续执勤第五天',unitVal:5,unitText:'5分/次'},
+        {label:'06：00（含）前签到或过夜期间05：30（含）前发车',unitVal:1,unitText:'1分/次'},
+        {label:'00：00-01：59解除任务',unitVal:2,unitText:'2分/次'},
+        {label:'02：00-03：59解除任务',unitVal:4,unitText:'4分/次'},
+        {label:'04：00后解除任务',unitVal:5,unitText:'5分/次'},
+        {label:'01：00后开始计算的连续10小时但小于15小时的休息期',unitVal:5,unitText:'5分/次'},
+        {label:'01：00后开始计算的连续48小时但小于60小时的休息期',unitVal:5,unitText:'5分/次'},
         {label:'一般高原机场',unitVal:1,unitText:'1分/次'},
         {label:'高高原机场',unitVal:2,unitText:'2分/次'},
-        {label:'特殊机长机场',unitVal:2,unitText:'2分/次'},
-        {label:'连续执勤≥13小时',unitVal:2,unitText:'2分/次'},
-        {label:'航班延误2-4小时',unitVal:1,unitText:'1分/次'},
-        {label:'航班延误4-6小时',unitVal:2,unitText:'2分/次'},
-        {label:'航班延误≥6小时',unitVal:3,unitText:'3分/次'},
+        {label:'需要特殊机长资格批准机场',unitVal:2,unitText:'2分/次'},
+        {label:'连续执勤13小时（含）以上',unitVal:2,unitText:'2分/次'},
+        {label:'航班延误2-4（不含）小时',unitVal:1,unitText:'1分/次'},
+        {label:'航班延误4-6（不含）小时',unitVal:2,unitText:'2分/次'},
+        {label:'航班延误6小时及以上',unitVal:3,unitText:'3分/次'},
         {label:'备降',unitVal:2,unitText:'2分/次'},
         {label:'月度飞行时间≥60小时',unitVal:1,unitText:'1分/次统计'},
-        {label:'55-60周岁含',unitVal:1,unitText:'1分/次统计'},
-        {label:'60周岁不含及以上',unitVal:2,unitText:'2分/次统计'},
-        {label:'甲减等异常',unitVal:1,unitText:'1分/次统计'},
-        {label:'高风险人员',unitVal:2,unitText:'2分/次统计'}
+        {label:'55-60周岁（含）',unitVal:1,unitText:'1分/次统计'},
+        {label:'60周岁（不含）及以上',unitVal:2,unitText:'2分/次统计'},
+        {label:'有甲减、肥胖伴脂肪肝及高血脂两项指标异常',unitVal:1,unitText:'1分/次统计'},
+        {label:'健康分级3、4级人员',unitVal:2,unitText:'2分/次统计'}
       ];
       const tbody = document.querySelector('#fatigueTable tbody');
       items.forEach((it,i) => {
@@ -232,16 +306,18 @@ for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
         tr.innerHTML = `<td>${i+1}</td><td>${it.label}</td><td class="yesno"><label><input type="radio" name="item${i}" value="1">是</label><label><input type="radio" name="item${i}" value="0" checked>否</label></td><td>${it.unitText}</td><td class="score-cell">0</td>`;
         tbody.appendChild(tr);
       });
-      function updateScores() {
-        let total = parseFloat(initialSelect.value) || 0;
-        items.forEach((it, idx) => {
-          const val = document.querySelector(`input[name=item${idx}]:checked`).value;
-          const score = +val * it.unitVal;
-          document.querySelectorAll('.score-cell')[idx].textContent = score;
-          total += score;
-        });
-        document.getElementById('totalScore').textContent = total;
-      }
+     function updateScores() {
+  let total = parseFloat(initialSelect.value) || 0;
+  let single = 0;
+  items.forEach((it, idx) => {
+    const val = document.querySelector(`input[name=item${idx}]:checked`).value;
+    const score = +val * it.unitVal;
+    document.querySelectorAll('.score-cell')[idx].textContent = score;
+    single += score;
+  });
+  document.getElementById('singleScore').textContent = single;
+  document.getElementById('totalScore').textContent = total + single;
+}
       document.querySelectorAll('.yesno input').forEach(inp => inp.addEventListener('change', updateScores));
       initialSelect.addEventListener('change', updateScores);
      document.getElementById('exportBtn').addEventListener('click', () => {
@@ -315,29 +391,35 @@ if (hasError) {
   const fileNameUser = name.replace(/[\\/:*?"<>|,\s]/g, '') || '未知姓名';
   const fileNameDate = date || new Date().toISOString().slice(0,10);
 
-  const header = [
-    '姓名',
-    '年龄',
-    '是否飞行干部',
-    '填报时间',
-    '累计疲劳值',
-    ...items.map(it => it.label),
-    '总疲劳值',
-    '体感疲劳度'
-  ];
+  const singleScore = document.getElementById('singleScore').textContent;
+const totalScore = document.getElementById('totalScore').textContent;
 
-  const data = [
-    name,
-    age,
-    isManager,
-    date,
-    initial,
-    ...items.map((_, i) =>
-      document.querySelectorAll('.score-cell')[i].textContent
-    ),
-    document.getElementById('totalScore').textContent,
-    document.querySelector('input[name="selfFatigue"]:checked').value
-  ];
+const header = [
+  '姓名',
+  '年龄',
+  '是否飞行干部',
+  '填报时间',
+  '累计疲劳值',
+  ...items.map(it => it.label),
+  '单次疲劳值',
+  '总疲劳值',
+  '体感疲劳度'
+];
+
+const data = [
+  name,
+  age,
+  isManager,
+  date,
+  initial,
+  ...items.map((_, i) =>
+    document.querySelectorAll('.score-cell')[i].textContent
+  ),
+  singleScore,    // 新增
+  totalScore,     // 保持
+  document.querySelector('input[name="selfFatigue"]:checked').value
+];
+
 
   const csv = [header, data].map(row => row.join(',')).join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -346,7 +428,7 @@ if (hasError) {
   link.download = `${fileNameUser}_${fileNameDate}.csv`;
 
   // 自动复制邮箱
-  const email = '1@111.com';
+  const email = 'N/A';
   navigator.clipboard.writeText(email);
 
   link.click();
