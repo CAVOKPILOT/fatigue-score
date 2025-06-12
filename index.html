@@ -66,7 +66,8 @@
   <nav role="tablist" aria-label="选项卡">
     <button role="tab" class="tab" id="tab1-btn" aria-selected="true" aria-controls="tab1">疲劳计算器</button>
     <button role="tab" class="tab" id="tab2-btn" aria-selected="false" aria-controls="tab2">填写说明</button>
-    <button role="tab" class="tab" id="tab3-btn" aria-selected="false" aria-controls="tab3">CSV 文件合并</button>
+    <button role="tab" class="tab" id="tab3-btn" aria-selected="false" aria-controls="tab3">CSV 文件</button>
+    <button role="tab" class="tab" id="tab4-btn" aria-selected="false" aria-controls="tab4">填写指南</button>
   </nav>
   <main>
     <section id="tab1" class="tabpanel" role="tabpanel" aria-labelledby="tab1-btn">
@@ -128,6 +129,65 @@
         <button type="button" id="mergeBtn">合并并下载 CSV</button>
       </article>
     </section>
+<section id="tab4" class="tabpanel" role="tabpanel" aria-labelledby="tab4-btn" hidden>
+  <article class="instructions" style="max-width:900px;margin:auto;">
+    <h2>填写指南</h2>
+    <ol>
+      <li>
+        <strong>疲劳计算器</strong>
+        <ol type="a">
+          <li><strong>填写基本信息：</strong> 姓名、年龄、是否飞行管理干部、填报时间、累计疲劳值（首次为0，连续填写选上次总疲劳值）。</li>
+          <li><strong>22项疲劳项目：</strong> 逐项选择“是/否”，自动算分。</li>
+          <li><strong>体感疲劳度：</strong> 选择A~D（旁边表格可参考）。</li>
+          <li><strong>导出数据：</strong> 填写完整后点击“点此复制下方邮箱地址并导出为 CSV”下载数据，自动复制邮箱地址。未填写项会标红提示，需补全后才能导出。</li>
+          <li>
+            <strong>CSV文件名命名规则：</strong>
+              <ol type="i">
+              <li>格式为：“姓名_填报日期.csv”</li>
+              <li>如姓名为“张三”，填报日期为2024-06-12，则文件名为：张三_2024-06-12.csv</li>
+              <li>姓名未填为“未知姓名_日期.csv”；日期未填则用当天日期。</li>
+	      </ol>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <strong>填写说明</strong>
+        <ol type="a">
+          <li>见页面内容</li>
+        </ol>
+      </li>
+      <li>
+        <strong>CSV文件合并</strong>
+        <ol type="a">
+          <li>支持将多个相同表头的疲劳评估CSV文件进行合并，便于管理和统计。</li>
+          <li>操作步骤：</li>
+  	  <ol type="i">
+	  <li>点击“选择文件”，批量选取待合并的CSV文件。</li>
+	  <li>点击“合并并下载 CSV”，自动合成一份大表格，文件名自动带日期与四位随机数。</li>
+	  <li>如果遇到表头不一致的文件，软件会自动跳过并提示。</li>
+        </ol>
+      </li>
+      <li>
+        <strong>界面功能补充说明</strong>
+        <ol type="a">
+          <li><strong>红色高亮与浮动提示：</strong>未填写的内容会被高亮显示，提交时会自动提示并阻止导出，填写完整后自动恢复正常。</li>
+          <li><strong>表单实时校验：</strong>输入或选择后自动取消高亮，提升填写体验。</li>
+          <li><strong>邮箱复制功能：</strong>导出时自动复制指定邮箱，无需手动操作。</li>
+          <li><strong>体感疲劳度参考表：</strong>帮助用户自查、准确选择。</li>
+        </ol>
+      </li>
+      <li>
+        <strong>常见问题</strong>
+        <ol type="a">
+          <li><strong>无法导出：</strong>检查红色高亮项并补全。</li>
+          <li><strong>企业微信导出CSV文件失败：</strong>目前不支持企业微信导出CSV文件，请使用手机微信</li>
+          <li><strong>邮箱无法自动复制：</strong>某些浏览器可能屏蔽自动复制，请手动复制页面下方的邮箱地址。</li>
+          <li><strong>文件合并被跳过：</strong>请检查文件表头是否一致。</li>
+        </ol>
+      </li>
+    </ol>
+  </article>
+</section>
   </main>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
