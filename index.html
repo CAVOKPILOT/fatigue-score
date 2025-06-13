@@ -6,15 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>东北地区运输公司飞行人员生理性疲劳评估量化指标</title>
   <style>
-    :root {
-      --primary-color: #007BFF;
-      --success-color: #28a745;
-      --bg-light: #f9f9f9;
-      --bg-white: #fff;
-      --border-color: #ddd;
-      --text-color: #333;
-      --font-family: Arial, sans-serif;
-    }
+:root {
+  --primary-color: #005BAC;         /* 民航深蓝色 */
+  --success-color: #1ABC9C;         /* 活力绿松石 */
+  --bg-light: #f4f7fa;              /* 背景淡灰蓝 */
+  --bg-white: #ffffff;
+  --border-color: #cfd9e1;
+  --text-color: #2c3e50;            /* 钛灰色 */
+  --font-family: "Helvetica Neue", "PingFang SC", Arial, sans-serif;
+}
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font-family); background: var(--bg-light); color: var(--text-color); padding: 20px; }
     header, nav, main, section { margin-bottom: 20px; }
@@ -30,13 +30,29 @@
     .instructions ol ol ol { padding-left: 2.5em; }
     .instructions ol ol ol ol { padding-left: 3em; }
     .instructions ol li { margin-bottom: 0.5em; }
-    .info-form { display: flex; flex-wrap: wrap; gap: 20px; background: var(--bg-white); border: 1px solid var(--border-color); border-radius: 4px; padding: 16px; margin-bottom: 20px; }
+    .info-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
     .info-form label { display: flex; flex-direction: column; font-size: 14px; }
     .info-form input, .info-form select { margin-top: 4px; padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 4px; }
     .yesno {display: flex;justify-content: center;  /* 水平居中 */align-items: center;gap: 8px;width: 100%;}
     table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
     table caption { font-weight: bold; margin-bottom: 8px; text-align: left; }
-    table thead { background: var(--primary-color); color: var(--bg-white); }
+    table thead {
+  background: linear-gradient(to right, #005BAC, #0074D9);
+  color: white;
+}
+table tbody tr:hover {
+  background-color: #eef4fc;
+}
     th, td { border: 1px solid var(--border-color); padding: 10px; text-align: center; font-size: 14px; vertical-align: middle; }
     tfoot td { font-weight: bold; background: #f0f0f0; }
     fieldset.voting { background: var(--bg-white); border: 1px solid var(--border-color); border-radius: 4px; padding: 16px; margin-bottom: 20px; }
@@ -44,7 +60,15 @@
     fieldset.voting label { margin-right: 20px; font-size: 14px; display: inline-block; }
     .symptom-table { margin-bottom: 20px; }
     .symptom-table caption { font-weight: bold; margin-bottom: 8px; text-align: left; }
-    button { font-size: 14px; }
+    button {
+  font-size: 14px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
     #exportBtn, #mergeBtn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
     #exportBtn { background: var(--success-color); color: var(--bg-white); margin-bottom: 20px; }
     #mergeBtn { background: var(--success-color); color: var(--bg-white); }
@@ -56,13 +80,193 @@
   font-family: Arial, sans-serif;
   word-break: break-all; /* 防止邮箱地址太长换行 */
 }
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .info-form {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .info-form label {
+    width: 100%;
+  }
+
+  .yesno {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 6px;
+  }
+
+  .tab {
+    font-size: 14px;
+    padding: 8px 12px;
+    flex: 1;
+  }
+
+  nav {
+    flex-wrap: wrap;
+  }
+
+  .email-info {
+    font-size: 12px;
+    word-break: break-word;
+  }
+
+  #toast {
+    bottom: 20px;
+    width: calc(100% - 40px);
+    max-width: 360px;
+    font-size: 14px;
+  }
+}
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+.form-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.form-title {
+  min-width: 120px;
+  font-size: 15px;
+  color: var(--text-color);
+}
+
+.radio-group {
+  display: flex;
+  gap: 24px;
+  font-size: 15px;
+}
+.radio-group input[type="radio"] {
+  transform: scale(1.2);
+  margin-right: 6px;
+}
+.radio-group input[type="radio"]:checked {
+  accent-color: var(--primary-color);  /* 支持多数现代浏览器 */
+}
+.alert-box {
+  border-left: 6px solid;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.alert-box.inline-note {
+  background-color: #f0f8ff;
+  border-left: 4px solid #3498db;
+  padding: 10px 16px;
+  margin: 10px 0 16px 0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2c3e50;
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.alert-box.info {
+  background-color: #f0f8ff;
+  border-color: #3498db;
+  color: #2c3e50;
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.alert-box:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.voting-enhanced {
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  background: #f8fbff;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.voting-enhanced legend {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: #2c3e50;
+}
+
+.legend-title {
+  color: var(--primary-color);
+}
+
+.legend-note {
+  font-size: 13px;
+  color: #555;
+}
+
+.radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 8px;
+  font-size: 15px;
+}
+
+.radio-options input[type="radio"] {
+  accent-color: var(--primary-color);
+  transform: scale(1.1);
+  margin-right: 4px;
+}
+@keyframes breathe {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(52,152,219,0.0);
+  }
+  50% {
+    transform: scale(1.01);
+    box-shadow: 0 0 12px rgba(52,152,219,0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(52,152,219,0.0);
+  }
+}
+.alert-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.icon-info {
+  flex-shrink: 0;
+}
+
+.alert-message {
+  line-height: 1.6;
+}
 
   </style>
 </head>
 <body>
-  <header>
-    <h1>东北地区运输公司飞行人员生理性疲劳评估量化指标</h1>
-  </header>
+<header>
+  <h1 style="text-align:center; font-size: 22px; color: #005BAC;">
+    东北地区运输公司飞行人员<br>生理性疲劳评估量化指标
+  </h1>
+</header>
   <nav role="tablist" aria-label="选项卡">
     <button role="tab" class="tab" id="tab1-btn" aria-selected="true" aria-controls="tab1">疲劳计算器</button>
     <button role="tab" class="tab" id="tab2-btn" aria-selected="false" aria-controls="tab2">填写说明</button>
@@ -71,7 +275,19 @@
   </nav>
   <main>
     <section id="tab1" class="tabpanel" role="tabpanel" aria-labelledby="tab1-btn">
-      <div class="instructions"><h2>注意：<br>连续填写时，请输入累计疲劳值<br>服务器不记录填写内容，请上传CSV文件</h2></div>
+      <div class="alert-box info">
+  <div class="alert-title">
+    <svg class="icon-info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+      <path fill="#3498db" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15h-1v-6h2v6h-1zm0-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+    </svg>
+    <strong>注意：</strong>
+  </div>
+  <div class="alert-message">
+    连续填写时，请输入累计疲劳值<br>
+    服务器不记录填写内容，请上传 CSV 文件
+  </div>
+</div>
+
       <form id="fatigueForm" class="info-form">
         <label>姓名：<input type="text" id="userName" name="userName"></label>
         <label>年龄：<input type="number" id="userAge" name="userAge"></label>
@@ -79,7 +295,8 @@
         <label>填报时间：<input type="date" id="reportDate" name="reportDate"></label>
         <label>累计疲劳值：<select id="initialFatigue"></select></label>
       </form>
-      <table id="fatigueTable">
+<div class="table-container">      
+<table id="fatigueTable">
   <caption>疲劳评估项目</caption>
   <thead>
     <tr>
@@ -107,8 +324,27 @@
 </tfoot>
 
 </table>
-      <fieldset class="voting" aria-labelledby="voting-legend"><legend id="voting-legend">体感疲劳度<strong>（当选择高度疲劳时，请及时合并CSV文件）</strong></legend><label><input type="radio" name="selfFatigue" value="A"> A 不疲劳</label><label><input type="radio" name="selfFatigue" value="B"> B 轻度</label><label><input type="radio" name="selfFatigue" value="C"> C 中度 </label><label><input type="radio" name="selfFatigue" value="D"> D 高度</label></fieldset>
-    <table class="symptom-table">
+</div>
+      <fieldset class="voting voting-enhanced" aria-labelledby="voting-legend">
+  <legend id="voting-legend">
+    <span class="legend-title">体感疲劳度</span>
+  </legend>
+
+  <div class="alert-box inline-note">
+    <strong>提示：</strong>当选择 <strong>高度疲劳</strong> 时，请及时合并 CSV 文件
+  </div>
+
+  <div class="radio-options">
+    <label><input type="radio" name="selfFatigue" value="A"> A 不疲劳</label>
+    <label><input type="radio" name="selfFatigue" value="B"> B 轻度</label>
+    <label><input type="radio" name="selfFatigue" value="C"> C 中度</label>
+    <label><input type="radio" name="selfFatigue" value="D"> D 高度</label>
+  </div>
+</fieldset>
+
+
+<div class="table-container">    
+<table class="symptom-table">
   <caption>体感疲劳度参考</caption>
   <thead>
     <tr>
@@ -151,7 +387,7 @@
     </tr>
   </tbody>
 </table>
-
+</div>
       <button type="button" id="exportBtn" >点此导出为 CSV 文件</button>
 <div class="email-info">邮箱地址：N/A</div>
     </section>
@@ -333,58 +569,90 @@ for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
       initialSelect.addEventListener('change', updateScores);
      document.getElementById('exportBtn').addEventListener('click', () => {
   let hasError = false;
+let firstInvalidElement = null;
+  const missingFields = [];
 
-  // 1. 先清除所有之前的高亮
+  // 清除高亮
   document.querySelectorAll('.info-form input, .info-form select').forEach(e => {
     e.style.border = '';
     e.style.background = '';
   });
   document.querySelectorAll('.yesno').forEach(div => div.style.background = '');
-document.querySelectorAll('input[name="selfFatigue"]').forEach(inp => {
-  inp.parentElement.style.background = '';
-});
+  document.querySelectorAll('input[name="selfFatigue"]').forEach(inp => {
+    inp.parentElement.style.background = '';
+  });
 
-  // 2. 校验每个必填项（姓名、年龄、管理干部、填报时间、累计疲劳值、22项单选、体感疲劳度）
-  // 2.1 姓名、年龄、填报时间
+  // 基本信息
   const nameInput = document.getElementById('userName');
   const ageInput = document.getElementById('userAge');
   const dateInput = document.getElementById('reportDate');
   const fatigueSelect = document.getElementById('initialFatigue');
 
-  if (!nameInput.value.trim()) { nameInput.style.border = '2px solid red'; hasError = true; }
-  if (!ageInput.value.trim()) { ageInput.style.border = '2px solid red'; hasError = true; }
-  if (!dateInput.value.trim()) { dateInput.style.border = '2px solid red'; hasError = true; }
-  if (!fatigueSelect.value) { fatigueSelect.style.border = '2px solid red'; hasError = true; }
+  if (!nameInput.value.trim()) {
+    nameInput.style.border = '2px solid red';
+    hasError = true;
+    missingFields.push('姓名');
+ if (!firstInvalidElement) firstInvalidElement = nameInput;
+  }
+  if (!ageInput.value.trim()) {
+    ageInput.style.border = '2px solid red';
+    hasError = true;
+    missingFields.push('年龄');
+ if (!firstInvalidElement) firstInvalidElement = ageInput;
+  }
+  if (!dateInput.value.trim()) {
+    dateInput.style.border = '2px solid red';
+    hasError = true;
+    missingFields.push('填报时间');
+ if (!firstInvalidElement) firstInvalidElement = dateInput;
+  }
+  if (!fatigueSelect.value) {
+    fatigueSelect.style.border = '2px solid red';
+    hasError = true;
+    missingFields.push('累计疲劳值');
+if (!firstInvalidElement) firstInvalidElement = fatigueSelect;
+  }
 
-  // 2.2 是否飞行管理干部
+  // 是否飞行管理干部
   const managerRadios = document.querySelectorAll('input[name="isManager"]');
-  if (![...managerRadios].some(r => r.checked)) {
-    // 高亮整个选项区域
-    managerRadios.forEach(r => r.parentElement.parentElement.style.background = '#ffeaea');
-    hasError = true;
-  }
-
-  // 2.3 22个疲劳评估项目
-  for (let i = 0; i < 22; i++) {
-    const radios = document.querySelectorAll(`input[name="item${i}"]`);
-    if (![...radios].some(r => r.checked)) {
-      // 高亮
-      radios.forEach(r => r.parentElement.parentElement.style.background = '#ffeaea');
-      hasError = true;
-    }
-  }
-
-  // 2.4 体感疲劳度
-  const selfFatigueRadios = document.querySelectorAll('input[name="selfFatigue"]');
-  if (![...selfFatigueRadios].some(r => r.checked)) {
-    selfFatigueRadios.forEach(r => r.parentElement.style.background = '#ffeaea');
-    hasError = true;
-  }
-
-if (hasError) {
-  showToast('有未填写项目，请完善所有内容！');
-  return;
+if (![...managerRadios].some(r => r.checked)) {
+  managerRadios.forEach(r => r.parentElement.parentElement.style.background = '#ffeaea');
+  hasError = true;
+  missingFields.push('是否为飞行管理干部');
+  if (!firstInvalidElement) firstInvalidElement = managerRadios[0];
 }
+
+  // 疲劳项目 22 项
+  for (let i = 0; i < 22; i++) {
+  const radios = document.querySelectorAll(`input[name="item${i}"]`);
+  if (![...radios].some(r => r.checked)) {
+    radios.forEach(r => r.parentElement.parentElement.style.background = '#ffeaea');
+    hasError = true;
+    missingFields.push(`第 ${i + 1} 项`);
+    if (!firstInvalidElement) firstInvalidElement = radios[0];
+  }
+}
+
+
+  // 体感疲劳度
+  const selfFatigueRadios = document.querySelectorAll('input[name="selfFatigue"]');
+ if (![...selfFatigueRadios].some(r => r.checked)) {
+  selfFatigueRadios.forEach(r => r.parentElement.style.background = '#ffeaea');
+  hasError = true;
+  missingFields.push('体感疲劳度');
+  if (!firstInvalidElement) firstInvalidElement = selfFatigueRadios[0];
+}
+
+
+  // 如果有错误
+  if (hasError) {
+  if (firstInvalidElement && typeof firstInvalidElement.scrollIntoView === 'function') {
+    firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+    const message = `有未填写项目，请完善以下内容：\n- ` + missingFields.join('\n- ');
+    showToast(message, 4000);
+    return;
+  }
 
   // ======= 校验通过，执行后续导出逻辑 =======
   // ... 你原有的导出CSV代码（比如生成内容/下载/复制邮箱等） ...
@@ -472,7 +740,7 @@ link.download = `merged_${new Date().toISOString().slice(0,10)}_${randomNum}.csv
     });
 function showToast(msg, duration=2500) {
   const toast = document.getElementById('toast');
-  toast.textContent = msg;
+  toast.innerHTML = msg.replace(/\n/g, '<br>');
   toast.style.display = 'block';
   clearTimeout(showToast._timer);
   showToast._timer = setTimeout(() => {
@@ -527,7 +795,8 @@ document.querySelectorAll('input[name="selfFatigue"]').forEach(radio => {
   bottom: 60px;
   transform: translateX(-50%);
   min-width: 240px;
-  background: #e34c4c;
+  background: #2980b9;
+  border-left: 6px solid #1abc9c;
   color: #fff;
   padding: 14px 28px;
   border-radius: 8px;
