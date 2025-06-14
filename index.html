@@ -563,10 +563,10 @@ const categoryGroups = [
   { name: '连续飞行或执勤', indices: [0, 1, 2] },
   { name: '签到签出',       indices: [3, 4, 5, 6] },
   { name: '休息期',         indices: [7, 8] },
-  { name: '机场类型',       indices: [9, 10, 11] },
-  { name: '航班时间与延误', indices: [12, 13, 14, 15] },
-  { name: '特殊情况',       indices: [16, 17] },
-  { name: '人员健康状况',   indices: [18, 19, 20, 21] }
+  { name: '特殊航线',       indices: [9, 10, 11] },
+  { name: '航班不正常', indices: [12, 13, 14, 15, 16] },
+  { name: '人员',       indices: [17, 18, 19] },
+  { name: '身体状况',   indices: [20, 21] }
 ];
 
 categoryGroups.forEach((group, groupIndex) => {
@@ -579,16 +579,17 @@ categoryGroups.forEach((group, groupIndex) => {
     let groupCellHTML = '';
     if (indexInGroup === 0) {
       groupCellHTML = `<td rowspan="${group.indices.length}" style="
-        writing-mode: vertical-lr;
-        text-align: center;
-        vertical-align: middle;
-        font-weight: bold;
-        background-color: ${bgColor};
-        border: 1px solid #ccc;
-        padding: 6px;
-        font-size: 14px;
-        color: #333;
-      ">${group.name}</td>`;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  background-color: ${bgColor};
+  border: 1px solid #ccc;
+  padding: 6px;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+"> ${group.name} </td>`;
+
     }
 
     tr.innerHTML = `
