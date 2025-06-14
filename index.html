@@ -579,20 +579,18 @@ categoryGroups.forEach((group, groupIndex) => {
     let groupCellHTML = '';
     if (indexInGroup === 0) {
       groupCellHTML = `<td rowspan="${group.indices.length}" style="
-  writing-mode: vertical-rl;
-  text-orientation: upright;
   text-align: center;
   vertical-align: middle;
   font-weight: bold;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.4;
   padding: 6px 4px;
   background-color: ${bgColor};
   border: 1px solid #ccc;
   white-space: nowrap;
-"
+">${[...group.name].join('<br>')}</td>`;
 
-> ${group.name} </td>`;
+
 
     }
 
