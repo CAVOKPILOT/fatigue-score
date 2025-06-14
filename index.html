@@ -304,7 +304,9 @@ button:hover {
 
       <form id="fatigueForm" class="info-form">
         <label>姓名：<input type="text" id="userName" name="userName"></label>
-        <label>年龄：<input type="number" id="userAge" name="userAge"></label>
+        <label>年龄：
+  <input type="number" id="userAge" name="userAge" min="18" max="70" step="1" inputmode="numeric">
+</label>
         <label>飞行管理干部：<div class="yesno"><label><input type="radio" name="isManager" value="是"> 是</label>&nbsp;&nbsp;<label><input type="radio" name="isManager" value="否"> 否</label></div></label>
         <label>填报时间：<input type="date" id="reportDate" name="reportDate"></label>
         <label>累计疲劳值：<select id="initialFatigue"></select></label>
@@ -312,27 +314,25 @@ button:hover {
 <div class="table-container">      
 <table id="fatigueTable">
   <caption>疲劳评估项目</caption>
-  <thead>
-    <tr>
-      <th>序号</th>
-      <th>项目</th>
-      <th>是/否</th>
-      <!-- <th>疲劳值</th> -->
-      <!-- <th>得分</th> -->
-    </tr>
-  </thead>
+<thead>
+  <tr>
+    <th>序号</th>
+    <th>类别</th>
+    <th>项目</th>
+    <th>是/否</th>
+  </tr>
+</thead>
+
   <tbody>
     <!-- 此处由JS动态生成内容 -->
   </tbody>
 <tfoot>
   <tr>
-    <td></td>
-    <td style="text-align:right;">单次疲劳值</td>
+    <td colspan="3" style="text-align:right;">单次疲劳值</td>
     <td id="singleScore"></td>
   </tr>
   <tr>
-    <td></td>
-    <td style="text-align:right;">总疲劳值</td>
+    <td colspan="3" style="text-align:right;">总疲劳值</td>
     <td id="totalScore"></td>
   </tr>
 </tfoot>
@@ -517,7 +517,12 @@ button:hover {
   </main>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const tabs = document.querySelectorAll('[role="tab"]');
+      const reportDateInput = document.getElementById('reportDate');
+      if (reportDateInput && !reportDateInput.value) {
+      const today = new Date().toISOString().slice(0, 10); // 格式：YYYY-MM-DD
+      reportDateInput.value = today;
+      }      
+const tabs = document.querySelectorAll('[role="tab"]');
       const panels = document.querySelectorAll('[role="tabpanel"]');
       tabs.forEach(tab => tab.addEventListener('click', () => {
         tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
@@ -553,20 +558,138 @@ for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
         {label:'健康分级3、4级人员',unitVal:2,unitText:'2分/次统计'}
       ];
       const tbody = document.querySelector('#fatigueTable tbody');
-      items.forEach((it,i) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${i+1}</td>
-<td>${it.label}</td>
-<td class="yesno">
-  <label><input type="radio" name="item${i}" value="1">是</label>
-  &nbsp;&nbsp;<label><input type="radio" name="item${i}" value="0" checked>否</label>
-  <span class="score-cell" style="display:none"></span>
-</td>`;
+const alternateColors = ['#f9fbfd', '#f2f5f9'];
+const categoryGroups = [
+  { name: '连续飞行或执勤', indices: [0, 1, 2] },
+  { name: '签到签出',       indices: [3, 4, 5, 6] },
+  { name: '休息期',         indices: [7, 8] },
+  { name: '机场类型',       indices: [9, 10, 11] },
+  { name: '航班时间与延误', indices: [12, 13, 14, 15] },
+  { name: '特殊情况',       indices: [16, 17] },
+  { name: '人员健康状况',   indices: [18, 19, 20, 21] }
+];
 
-<!-- <td>${it.unitText}</td><td class="score-cell">0</td>` -->
-;
-        tbody.appendChild(tr);
-      });
+categoryGroups.forEach((group, groupIndex) => {
+  const bgColor = alternateColors[groupIndex % 2]; // 蓝绿交替
+  group.indices.forEach((i, indexInGroup) => {
+    const it = items[i];
+    const tr = document.createElement('tr');
+    tr.style.backgroundColor = bgColor;
+
+    let groupCellHTML = '';
+    if (indexInGroup === 0) {
+      groupCellHTML = `<td rowspan="${group.indices.length}" style="
+        writing-mode: vertical-lr;
+        text-align: center;
+        vertical-align: middle;
+        font-weight: bold;
+        background-color: ${bgColor};
+        border: 1px solid #ccc;
+        padding: 6px;
+        font-size: 14px;
+        color: #333;
+      ">${group.name}</td>`;
+    }
+
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      ${groupCellHTML}
+      <td>${it.label}</td>
+      <td class="yesno">
+        <label><input type="radio" name="item${i}" value="1">是</label>
+        &nbsp;&nbsp;<label><input type="radio" name="item${i}" value="0" checked>否</label>
+        <span class="score-cell" style="display:none"></span>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+});
+// ✅ 限制第1~3项最多选一个为“是”
+[0, 1, 2].forEach(index => {
+  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
+  if (yesRadio) {
+    yesRadio.addEventListener('change', function () {
+      if (this.checked) {
+        [0, 1, 2].forEach(otherIndex => {
+          if (otherIndex !== index) {
+            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
+            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
+            if (otherYes && otherNo) {
+              otherYes.checked = false;
+              otherNo.checked = true;
+            }
+          }
+        });
+        updateScores(); // 重新计算得分
+      }
+    });
+  }
+});
+// ✅ 限制第5~7项最多选一个为“是”
+[4, 5, 6].forEach(index => {
+  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
+  if (yesRadio) {
+    yesRadio.addEventListener('change', function () {
+      if (this.checked) {
+        [4, 5, 6].forEach(otherIndex => {
+          if (otherIndex !== index) {
+            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
+            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
+            if (otherYes && otherNo) {
+              otherYes.checked = false;
+              otherNo.checked = true;
+            }
+          }
+        });
+        updateScores(); // 重新计算得分
+      }
+    });
+  }
+});
+// ✅ 限制第14~16项最多选一个为“是”
+[13, 14, 15].forEach(index => {
+  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
+  if (yesRadio) {
+    yesRadio.addEventListener('change', function () {
+      if (this.checked) {
+        [13, 14, 15].forEach(otherIndex => {
+          if (otherIndex !== index) {
+            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
+            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
+            if (otherYes && otherNo) {
+              otherYes.checked = false;
+              otherNo.checked = true;
+            }
+          }
+        });
+        updateScores(); // 重新计算得分
+      }
+    });
+  }
+});
+
+// ✅ 限制第19~20项最多选一个为“是”
+[18, 19].forEach(index => {
+  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
+  if (yesRadio) {
+    yesRadio.addEventListener('change', function () {
+      if (this.checked) {
+        [18, 19].forEach(otherIndex => {
+          if (otherIndex !== index) {
+            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
+            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
+            if (otherYes && otherNo) {
+              otherYes.checked = false;
+              otherNo.checked = true;
+            }
+          }
+        });
+        updateScores(); // 重新计算得分
+      }
+    });
+  }
+});
+
      function updateScores() {
   let total = parseFloat(initialSelect.value) || 0;
   let single = 0;
@@ -614,6 +737,15 @@ let firstInvalidElement = null;
     missingFields.push('年龄');
  if (!firstInvalidElement) firstInvalidElement = ageInput;
   }
+else {
+  const age = parseInt(ageInput.value, 10);
+  if (isNaN(age) || age < 18 || age > 70) {
+    ageInput.style.border = '2px solid red';
+    hasError = true;
+    missingFields.push('年龄必须在18到70之间');
+    if (!firstInvalidElement) firstInvalidElement = ageInput;
+  }
+}
   if (!dateInput.value.trim()) {
     dateInput.style.border = '2px solid red';
     hasError = true;
@@ -770,6 +902,63 @@ function showToast(msg, duration=2500) {
     }
   });
 });
+document.getElementById('userAge').addEventListener('input', function () {
+  const age = parseInt(this.value, 10);
+
+  const item18_row = document.querySelectorAll('input[name="item18"]')[0].closest('tr');
+  const item19_row = document.querySelectorAll('input[name="item19"]')[0].closest('tr');
+  const item18_radios = document.querySelectorAll('input[name="item18"]');
+  const item19_radios = document.querySelectorAll('input[name="item19"]');
+
+  // 统一处理勾选与锁定
+  function lockRadio(radios, value) {
+    radios.forEach(r => {
+      r.checked = (r.value === value);
+      r.disabled = true;
+    });
+  }
+
+  function unlockRadio(radios) {
+    radios.forEach(r => {
+      r.disabled = false;
+    });
+  }
+
+  function setRowReadonly(row, isReadonly) {
+    row.style.backgroundColor = isReadonly ? '#f8f8f8' : ''; // 灰色背景
+    row.style.opacity = isReadonly ? '0.6' : '1';
+    row.style.pointerEvents = isReadonly ? 'none' : 'auto';  // 阻止鼠标操作
+  }
+
+  if (!isNaN(age)) {
+    // 锁定并根据年龄设置“是/否”
+    if (age >= 55 && age <= 60) {
+      lockRadio(item18_radios, '1');
+    } else {
+      lockRadio(item18_radios, '0');
+    }
+
+    if (age > 60) {
+      lockRadio(item19_radios, '1');
+    } else {
+      lockRadio(item19_radios, '0');
+    }
+
+    // 设置灰色行样式（只读效果）
+    setRowReadonly(item18_row, true);
+    setRowReadonly(item19_row, true);
+
+  } else {
+    // 恢复用户可选
+    unlockRadio(item18_radios);
+    unlockRadio(item19_radios);
+    setRowReadonly(item18_row, false);
+    setRowReadonly(item19_row, false);
+  }
+
+  updateScores(); // 自动刷新得分
+});
+
 document.getElementById('initialFatigue').addEventListener('change', function() {
   if (this.value) {
     this.style.border = '';
@@ -801,6 +990,49 @@ document.querySelectorAll('input[name="selfFatigue"]').forEach(radio => {
     });
   });
 });
+// 限制项目0~2最多只能一个为“是”
+[0, 1, 2].forEach(index => {
+  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
+  if (yesRadio) {
+    yesRadio.addEventListener('change', function () {
+      if (this.checked) {
+        [0, 1, 2].forEach(otherIndex => {
+          if (otherIndex !== index) {
+            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
+            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
+            if (otherYes && otherNo) {
+              otherYes.checked = false;
+              otherNo.checked = true;
+            }
+          }
+        });
+        updateScores(); // 重新计算得分
+      }
+    });
+  }
+});
+// ✅ 限制第6~8项（编号5~7）最多选一个为“是”
+[5, 6, 7].forEach(index => {
+  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
+  if (yesRadio) {
+    yesRadio.addEventListener('change', function () {
+      if (this.checked) {
+        [5, 6, 7].forEach(otherIndex => {
+          if (otherIndex !== index) {
+            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
+            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
+            if (otherYes && otherNo) {
+              otherYes.checked = false;
+              otherNo.checked = true;
+            }
+          }
+        });
+        updateScores();
+      }
+    });
+  }
+});
+
   </script>
 <div id="toast" style="
   display:none;
