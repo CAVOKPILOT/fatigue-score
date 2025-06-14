@@ -258,6 +258,35 @@ button:hover {
 .alert-message {
   line-height: 1.6;
 }
+#exportBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  background-color: var(--success-color);
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+}
+
+#exportBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+@media (max-width: 768px) {
+  #exportBtn {
+    font-size: 14px;
+    padding: 10px 16px;
+    bottom: 16px;
+    right: 12px;
+  }
+}
 
   </style>
 </head>
