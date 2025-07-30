@@ -258,57 +258,14 @@ button:hover {
 .alert-message {
   line-height: 1.6;
 }
-#exportBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 999;
-  background-color: var(--success-color);
-  color: #fff;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-}
-
-#exportBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
-}
-@media (max-width: 768px) {
-  #exportBtn {
-    font-size: 14px;
-    padding: 10px 16px;
-    bottom: 16px;
-    right: 12px;
-  }
-}
 
   </style>
 </head>
 <body>
 <header>
-<h1 style="
-  text-align:center;
-  font-size: 23px;
-  color: #005BAC;
-  border: 2px solid #007BFF;
-  padding: 12px 16px;
-  border-radius: 8px;
-  background-color: #f0f8ff;
-  box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
-  font-weight: bold;
-  display: inline-block;
-  margin: 20px auto;
-  width: 100%;
-">
-  东北地区运输公司飞行人员<br>生理性疲劳评估量化指标
-</h1>
-
+  <h1 style="text-align:center; font-size: 22px; color: #005BAC;">
+    东北地区运输公司飞行人员<br>生理性疲劳评估量化指标
+  </h1>
 </header>
   <nav role="tablist" aria-label="选项卡">
     <button role="tab" class="tab" id="tab1-btn" aria-selected="true" aria-controls="tab1">疲劳计算器</button>
@@ -333,9 +290,7 @@ button:hover {
 
       <form id="fatigueForm" class="info-form">
         <label>姓名：<input type="text" id="userName" name="userName"></label>
-        <label>年龄：
-  <input type="number" id="userAge" name="userAge" min="18" max="70" step="1" inputmode="numeric">
-</label>
+        <label>年龄：<input type="number" id="userAge" name="userAge"></label>
         <label>飞行管理干部：<div class="yesno"><label><input type="radio" name="isManager" value="是"> 是</label>&nbsp;&nbsp;<label><input type="radio" name="isManager" value="否"> 否</label></div></label>
         <label>填报时间：<input type="date" id="reportDate" name="reportDate"></label>
         <label>累计疲劳值：<select id="initialFatigue"></select></label>
@@ -343,25 +298,27 @@ button:hover {
 <div class="table-container">      
 <table id="fatigueTable">
   <caption>疲劳评估项目</caption>
-<thead>
-  <tr>
-    <th>序号</th>
-    <th>类别</th>
-    <th>项目</th>
-    <th>是/否</th>
-  </tr>
-</thead>
-
+  <thead>
+    <tr>
+      <th>序号</th>
+      <th>项目</th>
+      <th>是/否</th>
+      <!-- <th>疲劳值</th> -->
+      <!-- <th>得分</th> -->
+    </tr>
+  </thead>
   <tbody>
     <!-- 此处由JS动态生成内容 -->
   </tbody>
 <tfoot>
   <tr>
-    <td colspan="3" style="text-align:right;">单次疲劳值</td>
+    <td></td>
+    <td style="text-align:right;">单次疲劳值</td>
     <td id="singleScore"></td>
   </tr>
   <tr>
-    <td colspan="3" style="text-align:right;">总疲劳值</td>
+    <td></td>
+    <td style="text-align:right;">总疲劳值</td>
     <td id="totalScore"></td>
   </tr>
 </tfoot>
@@ -386,6 +343,45 @@ button:hover {
 </fieldset>
 
 
+<div class="table-container">    
+<table class="symptom-table">
+  <caption>体感疲劳度参考</caption>
+  <thead>
+    <tr>
+      <th>症状类型</th>
+      <th>轻度疲劳</th>
+      <th>中度疲劳，稍作调整即可</th>
+      <th>高度疲劳，需充分休息</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>注意力</td>
+      <td>正常、全神贯注</td>
+      <td>注意力集中比较困难，逐渐出现分配不合理情况</td>
+      <td>注意力集中不起来、不能合理分配</td>
+    </tr>
+    <tr>
+      <td>反应力</td>
+      <td>能够熟练、准确地完成飞行动作、能力与技术能够正常表现</td>
+      <td>反应能力下降、飞行动作有时不稳定</td>
+      <td>反应迟钝、容易出现小错误</td>
+    </tr>
+    <tr>
+      <td>情绪</td>
+      <td>高昂、愉快、活泼</td>
+      <td>有点低落、飞行基本感觉不到愉快</td>
+      <td>想停下来休息或调整</td>
+    </tr>
+    <tr>
+      <td>生理状况</td>
+      <td>精力充沛、心率血压正常</td>
+      <td>乏力、精神不振</td>
+      <td>不规律作息导致出现失眠症状</td>
+    </tr>
+  </tbody>
+</table>
+</div>
       <button type="button" id="exportBtn" >点此导出为 CSV 文件</button>
 <div class="email-info">邮箱地址：N/A</div>
     </section>
@@ -401,7 +397,7 @@ button:hover {
               <li>4.1 填报时间为前一次飞行值勤期结束后至下一个飞行值勤期开始前，评估前一个飞行值勤期情况及飞行值勤前休息情况。</li>
               <li>4.2 操作指南：
                   <ol style="list-style:none;">
-                  <li>4.2.1 长按二维码点选识别二维码，点右上角选 “**浏览器”打开，进入页面后即可开始逐项填写，一定要用浏览器打开，方能保存数据。</li>
+                  <li>4.2.1 长按二维码点选识别二维码，点右上角选 “**浏览器”打开（或两个点选反之）。进入页面后即可开始逐项填写。（注意一定要用浏览器打开，方能保存数据）。</li>
                  <li>4.2.2 填写后，点选“导出为CSV文件”即可保存此次填写。每次填写后必须导出CSV文件并保存。</li>
                  <li>4.2.3 点击“CSV文件合并”，按提示操作即可合并所有已填写并下载的疲劳评估表格。当选择高度疲劳时需进行“CSV文件合并”操作，以保存本人疲劳阈值。</li>
                   </ol>
@@ -411,7 +407,7 @@ button:hover {
               <li>4.6 累计疲劳值归零情况：
                 <ol style="list-style:none;">
                   <li>4.6.1 在值勤前或者主备份前的144小时内，至少获得连续60个小时（含）休息时间的情况。</li>
-                  <li>4.6.2 前一个飞行值勤期结束后到下一个飞行值勤期开始前，获得连续休息30小时（含）以上的情况。</li>
+                  <li>4.6.2 前一个飞行值勤期结束后到下一个飞行值勤期开始前，获得连续休息15小时（含）以上的情况。</li>
                   <li>4.6.3 疲劳举手获得充分休息并恢复到轻度疲劳或不疲劳状态后。</li>
                 </ol>
               </li>
@@ -419,9 +415,9 @@ button:hover {
           </li>
           <li><strong>相关释义：</strong>
             <ol style="list-style:none;">
-              <li>5.1 “连续值勤五天”包括飞行值勤、主备份、置位、模拟机训练和地面培训。</li>
+              <li>5.1 “连续值勤五天”包括飞行值勤、主备份、置位、模拟机训练和地面培训，不含连续两天及以上地面任务的情形。</li>
               <li>5.2 本指标评估使用24小时计时制。表中有关时间均指执行任务的当地时间。</li>
-              <li>5.3 第 6 条、第 7 条及女性生理期出现任一情况时，鼓励并支持飞行员疲劳“举手”报告。</li>
+              <li>5.3 第 6 条、第 7 条及女性生理期出现任一情况时，鼓励并支持飞行员疲劳“举手”报告，申请调整航班或休息。</li>
               <li>5.4 第 10条、第 11 条中“一般高原机场”与“高高原机场”均按南航《运行手册》第 14.4 条定义执行。</li>
               <li>5.5 第 12 条“需特殊机长资格批准机场”按南航《运行规范》C0003 条款批准的机场清单执行。</li>
               <li>5.6 第 17–22 条每次报告疲劳值时进行重复统计。</li>
@@ -501,12 +497,7 @@ button:hover {
   </main>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const reportDateInput = document.getElementById('reportDate');
-      if (reportDateInput && !reportDateInput.value) {
-      const today = new Date().toISOString().slice(0, 10); // 格式：YYYY-MM-DD
-      reportDateInput.value = today;
-      }      
-const tabs = document.querySelectorAll('[role="tab"]');
+      const tabs = document.querySelectorAll('[role="tab"]');
       const panels = document.querySelectorAll('[role="tabpanel"]');
       tabs.forEach(tab => tab.addEventListener('click', () => {
         tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
@@ -520,7 +511,7 @@ for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
       const items = [
         {label:'连续飞行值勤第3天',unitVal:2,unitText:'2分/天'},
         {label:'连续飞行值勤第4天',unitVal:3,unitText:'3分/天'},
-        {label:'连续执勤第五天',unitVal:5,unitText:'5分/次'},
+        {label:'连续执勤第5天（不含连续两天及以上地面任务的情形）',unitVal:5,unitText:'5分/次'},
         {label:'06：00（含）前签到或过夜期间05：30（含）前发车',unitVal:1,unitText:'1分/次'},
         {label:'00：00-01：59解除任务',unitVal:2,unitText:'2分/次'},
         {label:'02：00-03：59解除任务',unitVal:4,unitText:'4分/次'},
@@ -531,152 +522,31 @@ for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
         {label:'高高原机场',unitVal:2,unitText:'2分/次'},
         {label:'需要特殊机长资格批准机场',unitVal:2,unitText:'2分/次'},
         {label:'连续执勤13小时（含）以上',unitVal:2,unitText:'2分/次'},
-        {label:'航班延误2-4（不含）小时',unitVal:1,unitText:'1分/次'},
-        {label:'航班延误4-6（不含）小时',unitVal:2,unitText:'2分/次'},
-        {label:'航班延误6小时及以上',unitVal:3,unitText:'3分/次'},
+        {label:'航班延误（或调时）2-4（不含）小时',unitVal:1,unitText:'1分/次'},
+        {label:'航班延误（或调时）4-6（不含）小时',unitVal:2,unitText:'2分/次'},
+        {label:'航班延误（或调时）6小时及以上',unitVal:3,unitText:'3分/次'},
         {label:'备降',unitVal:2,unitText:'2分/次'},
         {label:'月度飞行时间≥60小时',unitVal:1,unitText:'1分/次统计'},
         {label:'55-60周岁（含）',unitVal:1,unitText:'1分/次统计'},
         {label:'60周岁（不含）及以上',unitVal:2,unitText:'2分/次统计'},
         {label:'有甲减、肥胖伴脂肪肝及高血脂两项指标异常',unitVal:1,unitText:'1分/次统计'},
-        {label:'健康分级3、4级人员',unitVal:2,unitText:'2分/次统计'}
+        {label:'健康分级3、4级人员（不含单纯肺大疱）',unitVal:2,unitText:'2分/次统计'}
       ];
       const tbody = document.querySelector('#fatigueTable tbody');
-const alternateColors = ['#f9fbfd', '#f2f5f9'];
-const categoryGroups = [
-  { name: '连续飞行或执勤', indices: [0, 1, 2] },
-  { name: '签到签出',       indices: [3, 4, 5, 6] },
-  { name: '休息期',         indices: [7, 8] },
-  { name: '特殊航线',       indices: [9, 10, 11] },
-  { name: '航班不正常', indices: [12, 13, 14, 15, 16] },
-  { name: '人员',       indices: [17, 18, 19] },
-  { name: '身体状况',   indices: [20, 21] }
-];
+      items.forEach((it,i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${i+1}</td>
+<td>${it.label}</td>
+<td class="yesno">
+  <label><input type="radio" name="item${i}" value="1">是</label>
+  &nbsp;&nbsp;<label><input type="radio" name="item${i}" value="0" checked>否</label>
+  <span class="score-cell" style="display:none"></span>
+</td>`;
 
-categoryGroups.forEach((group, groupIndex) => {
-  const bgColor = alternateColors[groupIndex % 2]; // 蓝绿交替
-  group.indices.forEach((i, indexInGroup) => {
-    const it = items[i];
-    const tr = document.createElement('tr');
-    tr.style.backgroundColor = bgColor;
-
-    let groupCellHTML = '';
-    if (indexInGroup === 0) {
-      groupCellHTML = `<td rowspan="${group.indices.length}" style="
-  text-align: center;
-  vertical-align: middle;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 1.4;
-  padding: 6px 4px;
-  background-color: ${bgColor};
-  border: 1px solid #ccc;
-  white-space: nowrap;
-">${[...group.name].join('<br>')}</td>`;
-
-
-
-    }
-
-    tr.innerHTML = `
-      <td>${i + 1}</td>
-      ${groupCellHTML}
-      <td>${it.label}</td>
-      <td class="yesno">
-        <label><input type="radio" name="item${i}" value="1">是</label>
-        &nbsp;&nbsp;<label><input type="radio" name="item${i}" value="0" checked>否</label>
-        <span class="score-cell" style="display:none"></span>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-});
-// ✅ 限制第1~3项最多选一个为“是”
-[0, 1, 2].forEach(index => {
-  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
-  if (yesRadio) {
-    yesRadio.addEventListener('change', function () {
-      if (this.checked) {
-        [0, 1, 2].forEach(otherIndex => {
-          if (otherIndex !== index) {
-            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
-            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
-            if (otherYes && otherNo) {
-              otherYes.checked = false;
-              otherNo.checked = true;
-            }
-          }
-        });
-        updateScores(); // 重新计算得分
-      }
-    });
-  }
-});
-// ✅ 限制第5~7项最多选一个为“是”
-[4, 5, 6].forEach(index => {
-  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
-  if (yesRadio) {
-    yesRadio.addEventListener('change', function () {
-      if (this.checked) {
-        [4, 5, 6].forEach(otherIndex => {
-          if (otherIndex !== index) {
-            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
-            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
-            if (otherYes && otherNo) {
-              otherYes.checked = false;
-              otherNo.checked = true;
-            }
-          }
-        });
-        updateScores(); // 重新计算得分
-      }
-    });
-  }
-});
-// ✅ 限制第14~16项最多选一个为“是”
-[13, 14, 15].forEach(index => {
-  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
-  if (yesRadio) {
-    yesRadio.addEventListener('change', function () {
-      if (this.checked) {
-        [13, 14, 15].forEach(otherIndex => {
-          if (otherIndex !== index) {
-            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
-            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
-            if (otherYes && otherNo) {
-              otherYes.checked = false;
-              otherNo.checked = true;
-            }
-          }
-        });
-        updateScores(); // 重新计算得分
-      }
-    });
-  }
-});
-
-// ✅ 限制第19~20项最多选一个为“是”
-[18, 19].forEach(index => {
-  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
-  if (yesRadio) {
-    yesRadio.addEventListener('change', function () {
-      if (this.checked) {
-        [18, 19].forEach(otherIndex => {
-          if (otherIndex !== index) {
-            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
-            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
-            if (otherYes && otherNo) {
-              otherYes.checked = false;
-              otherNo.checked = true;
-            }
-          }
-        });
-        updateScores(); // 重新计算得分
-      }
-    });
-  }
-});
-
+<!-- <td>${it.unitText}</td><td class="score-cell">0</td>` -->
+;
+        tbody.appendChild(tr);
+      });
      function updateScores() {
   let total = parseFloat(initialSelect.value) || 0;
   let single = 0;
@@ -724,15 +594,6 @@ let firstInvalidElement = null;
     missingFields.push('年龄');
  if (!firstInvalidElement) firstInvalidElement = ageInput;
   }
-else {
-  const age = parseInt(ageInput.value, 10);
-  if (isNaN(age) || age < 18 || age > 70) {
-    ageInput.style.border = '2px solid red';
-    hasError = true;
-    missingFields.push('年龄必须在18到70之间');
-    if (!firstInvalidElement) firstInvalidElement = ageInput;
-  }
-}
   if (!dateInput.value.trim()) {
     dateInput.style.border = '2px solid red';
     hasError = true;
@@ -833,17 +694,39 @@ const data = [
 ];
 
 
-  const csv = [header, data].map(row => row.join(',')).join('\n');
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `${fileNameUser}_${fileNameDate}.csv`;
+ const csv = [header, data].map(row => row.join(',')).join('\n');
+const fileName = `${fileNameUser}_${fileNameDate}.csv`;
 
-  // 自动复制邮箱
-  const email = 'N/A';
-  navigator.clipboard.writeText(email);
+// ✅ 调用 Cloudflare Worker 接口生成真实可分享文件
+fetch("https://csv-worker.309718338.workers.dev", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    csv: csv,
+    filename: fileName
+  })
+})
+.then(res => res.blob())
+.then(blob => {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+})
+.catch(err => {
+  alert("导出失败，请稍后再试");
+  console.error(err);
+});
 
-  link.click();
+// ✅ 这段“复制邮箱”逻辑保留
+const email = 'N/A';
+navigator.clipboard.writeText(email);
+
 
 });
 
@@ -889,63 +772,6 @@ function showToast(msg, duration=2500) {
     }
   });
 });
-document.getElementById('userAge').addEventListener('input', function () {
-  const age = parseInt(this.value, 10);
-
-  const item18_row = document.querySelectorAll('input[name="item18"]')[0].closest('tr');
-  const item19_row = document.querySelectorAll('input[name="item19"]')[0].closest('tr');
-  const item18_radios = document.querySelectorAll('input[name="item18"]');
-  const item19_radios = document.querySelectorAll('input[name="item19"]');
-
-  // 统一处理勾选与锁定
-  function lockRadio(radios, value) {
-    radios.forEach(r => {
-      r.checked = (r.value === value);
-      r.disabled = true;
-    });
-  }
-
-  function unlockRadio(radios) {
-    radios.forEach(r => {
-      r.disabled = false;
-    });
-  }
-
-  function setRowReadonly(row, isReadonly) {
-    row.style.backgroundColor = isReadonly ? '#f8f8f8' : ''; // 灰色背景
-    row.style.opacity = isReadonly ? '0.6' : '1';
-    row.style.pointerEvents = isReadonly ? 'none' : 'auto';  // 阻止鼠标操作
-  }
-
-  if (!isNaN(age)) {
-    // 锁定并根据年龄设置“是/否”
-    if (age >= 55 && age <= 60) {
-      lockRadio(item18_radios, '1');
-    } else {
-      lockRadio(item18_radios, '0');
-    }
-
-    if (age > 60) {
-      lockRadio(item19_radios, '1');
-    } else {
-      lockRadio(item19_radios, '0');
-    }
-
-    // 设置灰色行样式（只读效果）
-    setRowReadonly(item18_row, true);
-    setRowReadonly(item19_row, true);
-
-  } else {
-    // 恢复用户可选
-    unlockRadio(item18_radios);
-    unlockRadio(item19_radios);
-    setRowReadonly(item18_row, false);
-    setRowReadonly(item19_row, false);
-  }
-
-  updateScores(); // 自动刷新得分
-});
-
 document.getElementById('initialFatigue').addEventListener('change', function() {
   if (this.value) {
     this.style.border = '';
@@ -977,49 +803,6 @@ document.querySelectorAll('input[name="selfFatigue"]').forEach(radio => {
     });
   });
 });
-// 限制项目0~2最多只能一个为“是”
-[0, 1, 2].forEach(index => {
-  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
-  if (yesRadio) {
-    yesRadio.addEventListener('change', function () {
-      if (this.checked) {
-        [0, 1, 2].forEach(otherIndex => {
-          if (otherIndex !== index) {
-            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
-            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
-            if (otherYes && otherNo) {
-              otherYes.checked = false;
-              otherNo.checked = true;
-            }
-          }
-        });
-        updateScores(); // 重新计算得分
-      }
-    });
-  }
-});
-// ✅ 限制第6~8项（编号5~7）最多选一个为“是”
-[5, 6, 7].forEach(index => {
-  const yesRadio = document.querySelector(`input[name="item${index}"][value="1"]`);
-  if (yesRadio) {
-    yesRadio.addEventListener('change', function () {
-      if (this.checked) {
-        [5, 6, 7].forEach(otherIndex => {
-          if (otherIndex !== index) {
-            const otherYes = document.querySelector(`input[name="item${otherIndex}"][value="1"]`);
-            const otherNo = document.querySelector(`input[name="item${otherIndex}"][value="0"]`);
-            if (otherYes && otherNo) {
-              otherYes.checked = false;
-              otherNo.checked = true;
-            }
-          }
-        });
-        updateScores();
-      }
-    });
-  }
-});
-
   </script>
 <div id="toast" style="
   display:none;
