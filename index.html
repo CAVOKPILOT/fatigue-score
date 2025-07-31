@@ -379,9 +379,9 @@ button:hover {
 
   <div class="radio-options">
     <label><input type="radio" name="selfFatigue" value="A"> A 不疲劳</label>
-    <label><input type="radio" name="selfFatigue" value="B"> B 轻度</label>
-    <label><input type="radio" name="selfFatigue" value="C"> C 中度</label>
-    <label><input type="radio" name="selfFatigue" value="D"> D 高度</label>
+    <label><input type="radio" name="selfFatigue" value="B"> B 轻度疲劳</label>
+    <label><input type="radio" name="selfFatigue" value="C"> C 中度疲劳，稍做调整即可</label>
+    <label><input type="radio" name="selfFatigue" value="D"> D 高度疲，需充分休息</label>
   </div>
 </fieldset>
 
@@ -393,7 +393,7 @@ button:hover {
     <tr>
       <th>症状类型</th>
       <th>飞行轻度疲劳</th>
-      <th>飞行中度疲劳</th>
+      <th>飞行中度疲劳（疲劳预警）</th>
       <th>飞行高度疲劳</th>
     </tr>
   </thead>
@@ -401,32 +401,26 @@ button:hover {
     <tr>
       <td>注意力</td>
       <td>正常、全神贯注</td>
-      <td>注意力开始不集中、逐渐出现分配不合理情况</td>
+      <td>注意力集中比较困难，逐渐出现分配不合理情况</td>
       <td>注意力集中不起来、不能合理分配</td>
     </tr>
     <tr>
       <td>反应力</td>
       <td>能够熟练、准确地完成飞行动作、能力与技术能够正常表现</td>
       <td>反应能力下降、飞行动作有时不稳定</td>
-      <td>反应迟钝、容易出现小错误</td>
-    </tr>
-    <tr>
-      <td>兴奋性</td>
-      <td>兴奋度高、有持续飞行的愿望</td>
-      <td>积极性和兴奋性下降、不想持续飞行</td>
-      <td>失去兴奋性、想停下来休息</td>
+      <td>反应有些迟钝，稍不注意就容易出现小错误</td>
     </tr>
     <tr>
       <td>情绪</td>
       <td>高昂、愉快、活泼</td>
       <td>有点低落、飞行基本感觉不到愉快</td>
-      <td>对飞行产生厌倦</td>
+      <td>想停下来休息或调整</td>
     </tr>
     <tr>
       <td>生理状况</td>
       <td>精力充沛、心率血压正常</td>
-      <td>乏力、精神不振、心率血压下降</td>
-      <td>头痛、心跳加快、神经失调、有失眠症状</td>
+      <td>乏力、精神不振</td>
+      <td>不规律作息导致出现失眠症状</td>
     </tr>
   </tbody>
 </table>
@@ -446,7 +440,7 @@ button:hover {
               <li>4.1 填报时间为前一次飞行值勤期结束后至下一个飞行值勤期开始前，评估前一个飞行值勤期情况及飞行值勤前休息情况。</li>
               <li>4.2 操作指南：
                   <ol style="list-style:none;">
-                  <li>4.2.1 点选二维码PDF文件进入二维码页面后，点右上角选 “**浏览器”打开，然后长按二维码，点击识别二维码进入页面后即可开始逐项填写。</li>
+                  <li>4.2.1 长按二维码点选识别二维码，点右上角选 “**浏览器”打开（或两个点选反之）。进入页面后即可开始逐项填写。（注意一定要用浏览器打开，方能保存数据）。</li>
                  <li>4.2.2 填写后，点选“导出为CSV文件”即可保存此次填写。每次填写后必须导出CSV文件并保存。</li>
                  <li>4.2.3 点击“CSV文件合并”，按提示操作即可合并所有已填写并下载的疲劳评估表格。当选择高度疲劳时需进行“CSV文件合并”操作，以保存本人疲劳阈值。</li>
                   </ol>
@@ -464,9 +458,9 @@ button:hover {
           </li>
           <li><strong>相关释义：</strong>
             <ol style="list-style:none;">
-              <li>5.1 “连续值勤五天”包括飞行值勤、主备份、置位、模拟机训练和地面培训。</li>
+              <li>5.1 “连续值勤五天”包括飞行值勤、主备份、置位、模拟机训练和地面培训，不含连续两天及以上地面任务的情形。。</li>
               <li>5.2 本指标评估使用24小时计时制。表中有关时间均指执行任务的当地时间。</li>
-              <li>5.3 第 6 条、第 7 条及女性生理期出现任一情况时，鼓励并支持飞行员疲劳“举手”报告。</li>
+              <li>5.3 第 6 条、第 7 条及女性生理期出现任一情况时，鼓励并支持飞行员疲劳“举手”报告，申请调整航班或休息。</li>
               <li>5.4 第 10条、第 11 条中“一般高原机场”与“高高原机场”均按南航《运行手册》第 14.4 条定义执行。</li>
               <li>5.5 第 12 条“需特殊机长资格批准机场”按南航《运行规范》C0003 条款批准的机场清单执行。</li>
               <li>5.6 第 17–22 条每次报告疲劳值时进行重复统计。</li>
@@ -565,7 +559,7 @@ for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
       const items = [
         {label:'连续飞行值勤第3天',unitVal:2,unitText:'2分/天'},
         {label:'连续飞行值勤第4天',unitVal:3,unitText:'3分/天'},
-        {label:'连续执勤第五天',unitVal:5,unitText:'5分/次'},
+        {label:'连续执勤第5天(不含连续两天及以上地面任务的情形)',unitVal:5,unitText:'5分/次'},
         {label:'06：00（含）前签到或过夜期间05：30（含）前发车',unitVal:1,unitText:'1分/次'},
         {label:'00：00-01：59解除任务',unitVal:2,unitText:'2分/次'},
         {label:'02：00-03：59解除任务',unitVal:4,unitText:'4分/次'},
@@ -576,15 +570,15 @@ for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
         {label:'高高原机场',unitVal:2,unitText:'2分/次'},
         {label:'需要特殊机长资格批准机场',unitVal:2,unitText:'2分/次'},
         {label:'连续执勤13小时（含）以上',unitVal:2,unitText:'2分/次'},
-        {label:'航班延误2-4（不含）小时',unitVal:1,unitText:'1分/次'},
-        {label:'航班延误4-6（不含）小时',unitVal:2,unitText:'2分/次'},
-        {label:'航班延误6小时及以上',unitVal:3,unitText:'3分/次'},
+        {label:'航班延误(或调时)2-4（不含）小时',unitVal:1,unitText:'1分/次'},
+        {label:'航班延误(或调时)4-6（不含）小时',unitVal:2,unitText:'2分/次'},
+        {label:'航班延误(或调时)6小时及以上',unitVal:3,unitText:'3分/次'},
         {label:'备降',unitVal:2,unitText:'2分/次'},
         {label:'月度飞行时间≥60小时',unitVal:1,unitText:'1分/次统计'},
         {label:'55-60周岁（含）',unitVal:1,unitText:'1分/次统计'},
         {label:'60周岁（不含）及以上',unitVal:2,unitText:'2分/次统计'},
         {label:'有甲减、肥胖伴脂肪肝及高血脂两项指标异常',unitVal:1,unitText:'1分/次统计'},
-        {label:'健康分级3、4级人员',unitVal:2,unitText:'2分/次统计'}
+        {label:'健康分级3、4级人员(不含单纯肺大疱)',unitVal:2,unitText:'2分/次统计'}
       ];
       const tbody = document.querySelector('#fatigueTable tbody');
 const alternateColors = ['#f9fbfd', '#f2f5f9'];
