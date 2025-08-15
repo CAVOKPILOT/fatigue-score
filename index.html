@@ -522,9 +522,9 @@ for (let i = 0; i <= 200; i++) initialSelect.append(new Option(i, i));
         {label:'连续飞行值勤第4天',unitVal:3,unitText:'3分/天'},
         {label:'连续执勤第5天(不含连续两天及以上地面任务的情形)',unitVal:5,unitText:'5分/次'},
         {label:'06：00（含）前签到或过夜期间05：30（含）前发车',unitVal:1,unitText:'1分/次'},
-        {label:'23：00-00：59值勤期结束',unitVal:2,unitText:'2分/次'},
-        {label:'01：00-02：59值勤期结束',unitVal:4,unitText:'4分/次'},
-        {label:'03：00后值勤期结束',unitVal:5,unitText:'5分/次'},
+        {label:'00：00-01：59值勤期结束',unitVal:2,unitText:'2分/次'},
+        {label:'02：00-03：59值勤期结束',unitVal:4,unitText:'4分/次'},
+        {label:'04：00（含）后值勤期结束',unitVal:5,unitText:'5分/次'},
         {label:'01：00后开始计算的连续10小时但小于15小时的休息期',unitVal:5,unitText:'5分/次'},
         {label:'01：00后开始计算的连续48小时但小于60小时的休息期',unitVal:5,unitText:'5分/次'},
         {label:'一般高原机场',unitVal:1,unitText:'1分/次'},
@@ -1045,4 +1045,5 @@ document.querySelectorAll('input[name="selfFatigue"]').forEach(radio => {
   "></div>
 </body>
 </html>
+
 
